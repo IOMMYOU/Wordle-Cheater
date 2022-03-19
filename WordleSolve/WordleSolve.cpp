@@ -1,55 +1,81 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <thread>
 #include "letter.h"
 #include "letterHandling.h"
 #include "helper.h"
+#include "Debug.h"
+
+
+
+#define THREADS_NUM 2
 
 int main(int argc, char** argv){
 	std::string oLine;
 	int c = 0;
 	char b;
 	int pass = 0;
+	std::vector<std::string> args;
 	std::vector<std::string> iList;
 	iList.reserve(256);
 	alphabet *alpha = new alphabet;
 	std::vector<std::string> oList;	// does not have size reservation
-	//DBprint("debugging output on");
+
+	std::vector<std::thread> threads;
+
+
+	dbMsg("Debugging output enabled");
+
+
+
+	for (int i = 0; i < argc; ++i){
+		args.push_back(argv[i]);
+	}
 
 	//helper::printArgs(argc, argv);
-		//TODO class for input - read in list and add into alpha object
+	//TODO class for input - read in list and add into alpha object
+	//TODO sanitize the command line arguments into an array for use
 
 	while (std::cin.get(b)) {
-		//oLine.erase(oLine.begin(), oLine.end());			//clears each line from working data
 		if (b != '\n'){
 			oLine.push_back(b);									//builds line into working data
-			//alpha->raw[b - 97].frequency++;						//increases letter frequency when found in word TODO handling of more than lower case letters
-			std::cout << oLine << std::endl;
+			dbMsg(oLine.c_str());
 		}
 		else {
-			if (DEBUG_M) { std::cout << "run '\\n'" << std::endl; }
+			dbMsg("run '\\n'");
 			if (oLine == "exit") { return 0; }						//ends program when exit is typed in or blank line
 			if (oLine.size() <= 0) {
-				if (DEBUG_M) { std::cout << "oline size continue" << std::endl; }
+				dbMsg("oline size continue");
 				continue; 
 			}
 			else{
+				if (!letterHandling::letterNotInWord(oLine, argv[6])) {
+					dbMsg("not in word");
+					oLine.erase(oLine.begin(), oLine.end());
+					continue;
+				}
 				for (int i = 0; i < oLine.size(); i++) {
-					if (DEBUG_M) {std::cout << "i val: " << i << "oLine.size();" << oLine.size() << std::endl; }
-					std::cout << oLine << argv[i + 1] << i;
+					if (DEBUG_M) {std::cout << "i val: " << i << " oLine.size(); " << oLine.size() << std::endl; }
+					if (DEBUG_M) {std::cout << oLine << argv[i + 1] << i << std::endl; }		//TODO use sanitized input
 					pass = letterHandling::findFunc(oLine, argv[i+1], i );
-					if (DEBUG_M) { std::cout << "letterHandling" << std::endl; }
+					if (DEBUG_M) { std::cout << "letterHandling: " << pass << std::endl; }		//TODO use sanitized input
 					if (!pass){
-						if (DEBUG_M) { std::cout << "not pass" << std::endl; }
+						dbMsg("not pass");
 						oLine.erase(oLine.begin(), oLine.end());
 						continue;
 					}
 				}
 			}
 			if (!pass) { 
-				continue; 
 				oLine.erase(oLine.begin(), oLine.end());
-				}
+				continue;
+			}
+			//alpha->inputLine(oLine);
+			 
+
+			threads.push_back(std::thread(&alphabet::inputLine, alpha, oLine));
+
 			iList.push_back(oLine);	
 			c++;
 			oLine.erase(oLine.begin(), oLine.end());			//clears each line from working data
@@ -59,8 +85,15 @@ int main(int argc, char** argv){
 	for (int i = 0; i < iList.size(); i++) {
 		std::cout << i + 1 << " : " << iList[i] << std::endl;
 	}
-	//std::cout << c << " words " << std::endl;
-	//std::cout << c << " words " << std::endl;
+
+	for (auto& th : threads) {
+		th.join();
+	}
+	
+	alpha->sort();
+	alpha->setWeight(c);
+	alpha->outSortedUnique();
+	std::cout << std::endl << c << " words " << threads.size() << std::endl;
 	return 0;
 }
 

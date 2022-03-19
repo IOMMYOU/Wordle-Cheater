@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="letter.cpp" />
     <ClCompile Include="letterHandling.cpp" />
     <ClCompile Include="WordleSolve.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="letter.h" />
     <ClInclude Include="letterHandling.h" />

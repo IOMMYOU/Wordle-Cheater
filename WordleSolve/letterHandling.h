@@ -1,10 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-
-#ifndef DEBUG_M 
-#define DEBUG_M true
-#endif 
+#include "Debug.h"
 
 class letterHandling
 {

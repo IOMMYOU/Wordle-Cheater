@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include <algorithm>
-#ifndef DEBUG_M 
-#define DEBUG_M true
-#endif 
+#include <string>
+#include "Debug.h"
+#include <mutex>
 
 
 
@@ -14,6 +14,9 @@
 	public:
 		char letter;
 		int frequency;
+		int uniqueFrequency;
+		float weight;
+		std::mutex mut;
 	};
 
 	class alphabet {
@@ -23,7 +26,10 @@
 		~alphabet();
 		void outRaw();
 		void outSorted();
+		void outSortedUnique();
+		void setWeight(int wordCount);
 		letter raw[26] = {0};
 		letter sorted[26] = {0} ;
+		void inputLine(std::string input);
 	};
 //}

@@ -1,9 +1,6 @@
 #pragma once
 #include <iostream>
-
-#ifndef DEBUG_M 
-#define DEBUG_M false
-#endif 
+#include "Debug.h"
 
 class helper
 {
