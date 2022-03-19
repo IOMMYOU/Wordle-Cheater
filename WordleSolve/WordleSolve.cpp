@@ -9,7 +9,7 @@
 
 
 
-#define THREADS_NUM 2
+#define THREADS_NUM 4
 
 int main(int argc, char** argv){
 	std::string oLine;
