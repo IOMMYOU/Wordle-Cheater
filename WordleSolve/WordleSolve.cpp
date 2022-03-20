@@ -33,6 +33,11 @@ int main(int argc, char** argv){
 		args.push_back(argv[i]);
 	}
 
+	while(args.size() <= 7){
+		args.push_back(".");
+	}
+
+
 	//helper::printArgs(argc, argv);
 	//TODO class for input - read in list and add into alpha object
 	//TODO sanitize the command line arguments into an array for use
@@ -50,15 +55,15 @@ int main(int argc, char** argv){
 				continue; 
 			}
 			else{
-				if (!letterHandling::letterNotInWord(oLine, argv[6])) {
+				if (!letterHandling::letterNotInWord(oLine, args[6])) {
 					dbMsg("not in word");
 					oLine.erase(oLine.begin(), oLine.end());
 					continue;
 				}
 				for (int i = 0; i < oLine.size(); i++) {
 					if (DEBUG_M) {std::cout << "i val: " << i << " oLine.size(); " << oLine.size() << std::endl; }
-					if (DEBUG_M) {std::cout << oLine << argv[i + 1] << i << std::endl; }		//TODO use sanitized input
-					pass = letterHandling::findFunc(oLine, argv[i+1], i );
+					if (DEBUG_M) {std::cout << oLine << args[i + 1] << i << std::endl; }		//TODO use sanitized input
+					pass = letterHandling::findFunc(oLine, args[i+1], i );
 					if (DEBUG_M) { std::cout << "letterHandling: " << pass << std::endl; }		//TODO use sanitized input
 					if (!pass){
 						dbMsg("not pass");
@@ -72,10 +77,7 @@ int main(int argc, char** argv){
 				continue;
 			}
 			//alpha->inputLine(oLine);
-			 
-
 			threads.push_back(std::thread(&alphabet::inputLine, alpha, oLine));
-
 			iList.push_back(oLine);	
 			c++;
 			oLine.erase(oLine.begin(), oLine.end());			//clears each line from working data
