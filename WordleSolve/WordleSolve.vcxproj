@@ -139,21 +139,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="helper.cpp" />
-    <ClCompile Include="letter.cpp" />
-    <ClCompile Include="letterHandling.cpp" />
-    <ClCompile Include="WordleSolve.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="helper.h" />
-    <ClInclude Include="letter.h" />
-    <ClInclude Include="letterHandling.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="WordleSolve.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Debug.cpp" />
+    <ClCompile Include="src\helper.cpp" />
+    <ClCompile Include="src\letter.cpp" />
+    <ClCompile Include="src\letterHandling.cpp" />
+    <ClCompile Include="src\WordleSolve.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Debug.h" />
+    <ClInclude Include="src\helper.h" />
+    <ClInclude Include="src\letter.h" />
+    <ClInclude Include="src\letterHandling.h" />
+    <ClInclude Include="src\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="rsc\5list.txt" />
+    <Text Include="rsc\list.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
