@@ -3,39 +3,24 @@
 #include <iostream>
 #include <algorithm>
 
-/*
-public:
-	static int findFunc(const char&);	//not sure on data type
-	static void letterInPosition();
-	static void letterNotInPosition();
-	static void letterNotInWord();
-*/
 
 // call this from within a loop for each letter to increment the position
 int letterHandling::findFunc(std::string string, std::string pattern, int pos) {
-	if (DEBUG_M) { std::cout << "run findFunc()" << std::endl; }
-
 	int val;
 	int i = 0;
 	val = pattern.find('.');
 	if (val != -1) {																//has info
-		if (DEBUG_M) { std::cout << "no info val: " << val << std::endl; }
 		return 1;
 	}
-	if (DEBUG_M) { std::cout << "has info" << std::endl; }
 	val = pattern.find('+');
 	if(val==-1){																//out position
-		if (DEBUG_M) { std::cout << "not in position" << std::endl; }
 		return letterHandling::letterNotInPosition(string, pattern, pos);
 	}
 	else{																	//in position
 		pattern.erase(pattern.begin()+val);
-		if (DEBUG_M) { std::cout << "in position" << std::endl; }
 		return letterHandling::letterInPosition(string, pattern, pos);
 	}
-	//return letterHandling::letterNotInPosition(string, pattern, pos);
-
-	return -1;
+	return 0;
 }
 
 int letterHandling::findFunc(std::string string, std::string pattern) {
@@ -73,7 +58,6 @@ int  letterHandling::letterNotInPosition(std::string string, std::string pattern
 
 }
 int letterHandling::letterNotInWord(std::string string, std::string pattern) {
-	if (DEBUG_M) { std::cout << "run letterNotInWord()" << std::endl; }
 	int i = 0;
 	for (int ia = 0; ia < 5; ia++) {						//TODO make length dynamic
 		while ((pattern[i]) != '\0') {

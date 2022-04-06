@@ -1,112 +1,117 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <thread>
+#include <chrono>
+#include <fstream>
 #include "letter.h"
 #include "letterHandling.h"
-#include "helper.h"
-#include "Debug.h"
+#include "..\ThreadPool.h"
+#include <map>
 
-
-
-#define THREADS_NUM 4
-
-int main(int argc, char** argv){
-	std::string oLine;
-	int c = 0;
-	char b;
-	int pass = 0;
-	std::vector<std::string> args;
-	std::vector<std::string> iList;
-	iList.reserve(256);
-	alphabet *alpha = new alphabet;
-	std::vector<std::string> oList;	// does not have size reservation
-
-	std::vector<std::thread> threads;
-
-
-	dbMsg("Debugging output enabled");
-
-
-
-	for (int i = 0; i < argc; ++i){
-		args.push_back(argv[i]);
-	}
-
-	while(args.size() <= 7){
-		args.push_back(".");
-	}
-
-
-	//helper::printArgs(argc, argv);
-	//TODO class for input - read in list and add into alpha object
-	//TODO sanitize the command line arguments into an array for use
-
-	while (std::cin.get(b)) {
-		if (b != '\n'){
-			oLine.push_back(b);									//builds line into working data
-			dbMsg(oLine.c_str());
-		}
-		else {
-			dbMsg("run '\\n'");
-			if (oLine == "exit") { return 0; }						//ends program when exit is typed in or blank line
-			if (oLine.size() <= 0) {
-				dbMsg("oline size continue");
-				continue; 
-			}
-			else{
-				if (!letterHandling::letterNotInWord(oLine, args[6])) {
-					dbMsg("not in word");
-					oLine.erase(oLine.begin(), oLine.end());
-					continue;
-				}
-				for (int i = 0; i < oLine.size(); i++) {
-					if (DEBUG_M) {std::cout << "i val: " << i << " oLine.size(); " << oLine.size() << std::endl; }
-					if (DEBUG_M) {std::cout << oLine << args[i + 1] << i << std::endl; }		//TODO use sanitized input
-					pass = letterHandling::findFunc(oLine, args[i+1], i );
-					if (DEBUG_M) { std::cout << "letterHandling: " << pass << std::endl; }		//TODO use sanitized input
-					if (!pass){
-						dbMsg("not pass");
-						oLine.erase(oLine.begin(), oLine.end());
-						continue;
-					}
-				}
-			}
-			if (!pass) { 
-				oLine.erase(oLine.begin(), oLine.end());
-				continue;
-			}
-			//alpha->inputLine(oLine);
-			threads.push_back(std::thread(&alphabet::inputLine, alpha, oLine));
-			iList.push_back(oLine);	
-			c++;
-			oLine.erase(oLine.begin(), oLine.end());			//clears each line from working data
-		}
-		
-	}
-	for (int i = 0; i < iList.size(); i++) {
-		std::cout << i + 1 << " : " << iList[i] << std::endl;
-	}
-
-	for (auto& th : threads) {
-		th.join();
-	}
-	
-	alpha->sort();
-	alpha->setWeight(c);
-	alpha->outSortedUnique();
-	std::cout << std::endl << c << " words " << threads.size() << std::endl;
-	return 0;
+int func(int &input) {
+    input *= 2;
+    input += 2;
+    return input;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+int main(int argc, char** argv)
+{
+    int c = 0, thing = 2;
+    ThreadPool pool(1);
+    alphabet* alpha = new alphabet;
+    std::vector<std::future<int> > results;
+    std::vector<std::string> args, full_list, partial_list;
+    word_list* weighted_full_list = new word_list;
+    word_list* weighted_partial_list = new word_list;
+    int pass = 0;
+    int ins = 0;
+    std::string line;
+    std::ifstream myfile("c:/wordle/5list.txt");
+    std::map<std::string,float> weighted_map;
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
+    for (int i = 0; i < argc; ++i) {
+        args.push_back(argv[i]);
+    }
+    while (args.size() < 7) {
+        args.push_back(".");
+    }
+    for (std::string tc : args) {
+        std::cout << tc + " ";
+    }
+    std::cout << std::endl;
+    if (!myfile.is_open())
+    {   
+    std::cout << "Unable to open file";    
+    }
+    else {
+        while (std::getline(myfile, line))
+        {
+//            full_list.push_back(line);
+            if (line == "exit") { break; }						//ends program when exit is typed in or blank line
+            if (line.size() <= 0) {
+                continue;
+            }
+            else {
+                if (!letterHandling::letterNotInWord(line, args[6])){
+                continue;
+                }
+                else{
+                    //full_list.push_back(line);
+                }
+            for (size_t i = 0; i < line.size(); i++) {
+                pass = letterHandling::findFunc(line, args[i + 1], i);
+                if (!pass) {
+                    break;
+                }
+            }
+            if (!pass) {
+                full_list.push_back(line);
+                continue;
+            }
+            c++;
+            partial_list.push_back(line);
+            //pool.enqueue([alpha, line] {alpha->inputLine(line); });
+            pool.enqueue(&alphabet::inputLine, alpha, line);
+            }
+        }
+        myfile.close();
+    }
+    for (int i = 0; i < 8; ++i) {
+    //    results.emplace_back(pool.enqueue(&func,std::ref(thing)));
+    }   
+    for (int i = 0; i < 8; ++i) {
+    //    results.emplace_back(pool.enqueue(&func, thing));
+    }
+//    for (auto&& result : results)
+//        std::cout << result.get() << ' ';
+//    std::cout << std::endl;
+    alpha->sort();
+    alpha->setWeight(c);
+    alpha->outSortedUnique();
+//    std::cin.get();
+
+    for(std::string word : full_list){
+        weighted_full_list->addWord(alpha, word);
+    }
+    weighted_full_list->sortList();
+    
+    std::cout << "********************" << std::endl << "Elimination words" << std::endl;
+    for( int i =0; i < 5; i++){
+        std::cout << weighted_full_list->list[i].word << ": " << weighted_full_list->list[i].weight << std::endl;
+    }
+
+    for (std::string word : partial_list) {
+        weighted_partial_list->addWord(alpha, word);
+    }
+    weighted_partial_list->sortList();
+    
+//    std::cin.get();
+    std::cout << "********************" << std::endl << "Guesses" << std::endl;
+
+    for (int i =0; i< std::min(5,weighted_partial_list->size()); i++) {
+        std::cout << weighted_partial_list->list[i].word << ": " << weighted_partial_list->list[i].weight << std::endl;
+    }
+
+    return 0;
+}

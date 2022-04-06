@@ -44,6 +44,7 @@ void alphabet::outSortedUnique() {
 		std::cout << sorted[i].letter << "\t : " << sorted[i].uniqueFrequency << "\t weight : " << sorted[i].weight << std::endl;
 	}
 }
+ 
 
 int alphabet::sort() {
 	if (DEBUG_M) { std::cout << "run sort()" << std::endl; }
@@ -72,13 +73,13 @@ int alphabet::sort() {
 }
 
 void alphabet::inputLine(std::string input) {
-	if (DEBUG_M) { std::cout << "run inputLine()" << std::endl; }
+	if (0) { std::cout << "run inputLine()" << std::endl; }
 	int i = 0;
 	char c = input[i];
 	int test = 0;
 	std::string tempString; 
 	while (c != '\0') {
-		if (DEBUG_M) { std::cout << c; }
+		if (0) { std::cout << c; }
 		alphabet::raw[c - 'a'].mut.lock();
 		raw[c - 'a'].frequency++;
 		test = tempString.find(c);
@@ -94,11 +95,21 @@ void alphabet::inputLine(std::string input) {
 }
 
 void alphabet::setWeight(int wordCount) {
-	int halfWordCount = wordCount / 2;
+	float halfWordCount = 1.0f + ((float)wordCount / 2.0f);
 	for (int i=0; i<26; i++) {
-		alphabet::sorted[i].weight = halfWordCount - ( abs(halfWordCount - alphabet::sorted[i].uniqueFrequency)) ;
+	//	alphabet::sorted[i].weight = halfWordCount - ( abs(halfWordCount - alphabet::sorted[i].uniqueFrequency)) ;
+		alphabet::sorted[i].weight = halfWordCount - abs(halfWordCount - alphabet::sorted[i].uniqueFrequency);
 	}
 
 	//TODO need another scan through remaining words to try to find the highest elimination available from given weights
 	//TODO also possibly read in the original list for these weights to maximize letter removals
 }
+
+bool compareWordWeight(weighted_word w1, weighted_word w2)
+{
+	return (w1.weight > w2.weight);
+}
+
+
+
+
