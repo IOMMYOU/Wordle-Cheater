@@ -27,7 +27,7 @@ int main(int argc, char** argv)
     /*****************************************************************/
     /*****************************************************************/
     /*****************************************************************/
-    /*fill in arguments and attemp to open list file******************/
+    /*fill in arguments and check if list file is open****************/
     helper::prepArgs(argc, argv, args);
     if (!myfile.is_open()){
         std::cout << "Unable to open file";    
