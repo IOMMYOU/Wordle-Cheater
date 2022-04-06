@@ -15,6 +15,7 @@ int main(int argc, char** argv)
 {
     /*****************************************************************/
     /*variables used in main program**********************************/
+    /*passed in and out of function calls*****************************/
     int c = 0;
     ThreadPool pool(1);
     alphabet* alpha = new alphabet;
@@ -22,13 +23,19 @@ int main(int argc, char** argv)
     std::vector<std::string> args, full_list, partial_list;
     word_list* weighted_full_list = new word_list;
     word_list* weighted_partial_list = new word_list;
-    std::ifstream myfile("c:/wordle/5list.txt");
-//    std::ifstream myfile("../../WordleSolve/rsc/5list.txt");
+    std::ifstream myfile;
+    
     /*****************************************************************/
     /*****************************************************************/
     /*****************************************************************/
     /*fill in arguments and check if list file is open****************/
-    helper::prepArgs(argc, argv, args);
+    if(!helper::prepArgs(argc, argv, args)){return 0;}
+    if(argc>8){
+        myfile.open(argv[7]);
+    }
+    else {
+        myfile.open("c:/wordle/5list.txt");
+    }
     if (!myfile.is_open()){
         std::cout << "Unable to open file";    
         std::cin.get();

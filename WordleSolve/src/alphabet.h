@@ -3,8 +3,6 @@
 #ifndef _LETTER_H
 #define _LETTER_H
 
-
-
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -13,11 +11,9 @@
 #include <algorithm>
 #include <map>
 
-
-
 //namespace myClass{
 
-	struct letter {                                                                                         //structure chosen for combining data
+	struct s_letter {                                                                                         //structure chosen for combining data
 
 	public:
 		char letter;
@@ -26,6 +22,7 @@
 		float weight;
 		int pad[256];
 		std::mutex mut;
+		void operator = (s_letter& l);
 	};
 
 	class alphabet {
@@ -37,9 +34,9 @@
 		void outSorted();
 		void outSortedUnique();
 		void setWeight(int wordCount);
-		letter raw[26] = {0};
+		s_letter raw[26] = {0};
 		//int pad2[256];
-		letter sorted[26] = {0} ;
+		s_letter sorted[26] = {0} ;
 		void inputLine(std::string input);
 	};
 //}

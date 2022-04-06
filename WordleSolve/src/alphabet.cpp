@@ -4,9 +4,12 @@
 #include <algorithm>
 #include <string>
 
-/**/
-
-
+void s_letter::operator = (s_letter& l) {
+	this->frequency = l.frequency;
+	this->letter = l.letter;
+	this->uniqueFrequency = l.uniqueFrequency;
+	this->weight = l.weight;
+}
 
 alphabet::alphabet() {
 	for (int i = 0; i < 26; ++i) {							//initialize the alpha array of letter structures
@@ -50,24 +53,16 @@ void alphabet::outSortedUnique() {
 
 int alphabet::sort() {
 	if (DEBUG_M) { std::cout << "run sort()" << std::endl; }
-	letter swapLetter = {0};
-	for (int i = 0; i < 26; ++i) {							
-		sorted[i].letter = raw[i].letter;
-		sorted[i].frequency = raw[i].frequency;
-		sorted[i].uniqueFrequency = raw[i].uniqueFrequency;
+	s_letter swapLetter = {0};
+	for (int i = 0; i < 26; ++i) {		
+		sorted[i] = raw[i];
 	}
 	for (int ib = 0; ib < 26 - 1; ++ib) {
 		for (int i = 0; i < 26 - 1; ++i) {
 			if (sorted[i].uniqueFrequency < sorted[i + 1].uniqueFrequency) {
-				swapLetter.letter = sorted[i].letter;
-				swapLetter.frequency = sorted[i].frequency;
-				swapLetter.uniqueFrequency = sorted[i].uniqueFrequency;
-				sorted[i].letter = sorted[i+1].letter;
-				sorted[i].frequency= sorted[i + 1].frequency;
-				sorted[i].uniqueFrequency = sorted[i + 1].uniqueFrequency;
-				sorted[i + 1].letter = swapLetter.letter;
-				sorted[i + 1].frequency = swapLetter.frequency;
-				sorted[i+1].uniqueFrequency = swapLetter.uniqueFrequency;
+				swapLetter = sorted[i];
+				sorted[i] = sorted[i+1];
+				sorted[i+1] = swapLetter;
 			}
 		}
 	}
