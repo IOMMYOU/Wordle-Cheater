@@ -45,7 +45,7 @@
 //}
 
 	struct weighted_word {
-		float weight;
+		float weight = 0;
 		std::string word;
 	};
 
@@ -54,37 +54,12 @@
 	class word_list {
 	private:
 		weighted_word temp_word;
-//		bool compareWordWeight(weighted_word w1, weighted_word w2);
 	public:
-		int size(){return list.size();}
+		size_t size(){return list.size();}
 		std::vector<weighted_word> list;
-		void addWord(alphabet* alpha, std::string input) {
-			float val = 0;
-			bool repeat = 0;
-			//embed
-			for (int ia=0; ia < input.size(); ia++) {
-				for (int ib = 0; ib < ia; ib++) {
-					if(input[ia] == input[ib]){
-						repeat = 1;
-						break;
-					}
-				}
-				if (!repeat){val += alpha->sorted[input[ia] - 'a'].weight;}
-			}
-				
-			
-			temp_word.weight = val;
-			temp_word.word = input;
-			list.push_back(temp_word);
-		}
+		void addWord(alphabet* alpha, std::string input);
 		void sortList() {
 			std::sort(list.begin(), list.end(), compareWordWeight);
 		}
-
-
 	};
-
-
-
-
 #endif // !_LETTER_H

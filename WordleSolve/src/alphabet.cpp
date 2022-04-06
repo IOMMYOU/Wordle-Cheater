@@ -1,5 +1,5 @@
 #pragma once
-#include "letter.h"
+#include "alphabet.h"
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -19,7 +19,9 @@ alphabet::alphabet() {
 }
 
 alphabet::~alphabet() {
+	delete[] raw;
 	delete raw;
+	delete[] sorted;
 	delete sorted;
 }
 
@@ -97,12 +99,8 @@ void alphabet::inputLine(std::string input) {
 void alphabet::setWeight(int wordCount) {
 	float halfWordCount = 1.0f + ((float)wordCount / 2.0f);
 	for (int i=0; i<26; i++) {
-	//	alphabet::sorted[i].weight = halfWordCount - ( abs(halfWordCount - alphabet::sorted[i].uniqueFrequency)) ;
 		alphabet::sorted[i].weight = halfWordCount - abs(halfWordCount - alphabet::sorted[i].uniqueFrequency);
 	}
-
-	//TODO need another scan through remaining words to try to find the highest elimination available from given weights
-	//TODO also possibly read in the original list for these weights to maximize letter removals
 }
 
 bool compareWordWeight(weighted_word w1, weighted_word w2)
@@ -111,5 +109,21 @@ bool compareWordWeight(weighted_word w1, weighted_word w2)
 }
 
 
+void word_list::addWord(alphabet* alpha, std::string input) {
+	float val = 0;
+	bool repeat = 0;
+	for (int ia = 0; ia < input.size(); ia++) {
+		for (int ib = 0; ib < ia; ib++) {
+			if (input[ia] == input[ib]) {
+				repeat = 1;
+				break;
+			}
+		}
+		if (!repeat) { val += alpha->sorted[input[ia] - 'a'].weight; }
+	}
+	temp_word.weight = val;
+	temp_word.word = input;
+	list.push_back(temp_word);
+}
 
 
