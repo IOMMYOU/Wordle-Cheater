@@ -3,7 +3,8 @@
 #include <string>
 #include "Debug.h"
 #include "alphabet.h"
-#include "..\ThreadPool.h"
+#include "ThreadPool.h"
+
 using vstring = std::vector<std::string>;
 
 class letterHandling

@@ -146,8 +146,8 @@
     <ClCompile Include="src\helper.cpp" />
     <ClCompile Include="src\alphabet.cpp" />
     <ClCompile Include="src\letterHandling.cpp" />
+    <ClCompile Include="src\ThreadPool.cpp" />
     <ClCompile Include="src\WordleSolve.cpp" />
-    <ClCompile Include="ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debug.h" />
@@ -155,7 +155,7 @@
     <ClInclude Include="src\alphabet.h" />
     <ClInclude Include="src\letterHandling.h" />
     <ClInclude Include="src\resource.h" />
-    <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="src\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="rsc\5list.txt" />

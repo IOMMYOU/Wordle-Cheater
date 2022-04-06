@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include "alphabet.h"
-#include "..\ThreadPool.h"
+#include "ThreadPool.h"
 using vstring = std::vector<std::string>;
 
 // call this from within a loop for each letter to increment the position

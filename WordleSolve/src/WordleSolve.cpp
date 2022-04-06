@@ -5,7 +5,7 @@
 #include <fstream>
 #include "alphabet.h"
 #include "letterHandling.h"
-#include "..\ThreadPool.h"
+#include "ThreadPool.h"
 #include <map>
 #include "helper.h"
 
